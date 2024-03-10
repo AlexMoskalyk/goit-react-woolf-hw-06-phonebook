@@ -6,10 +6,11 @@ import { nanoid } from 'nanoid';
 import Filter from './filter/Filter';
 import { useSelector, useDispatch } from 'react-redux';
 import { addContact } from '../store/ContactsSlice';
+import { contactsArrSelector, filterSelector } from 'store/Selector';
 
 const App = () => {
-  const contactsArr = useSelector(state => state.contacts.contactsArr);
-  const filter = useSelector(state => state.contacts.filter);
+  const contactsArr = useSelector(contactsArrSelector);
+  const filter = useSelector(filterSelector);
 
   const dispatch = useDispatch();
 
