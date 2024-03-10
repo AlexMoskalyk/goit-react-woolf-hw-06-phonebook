@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import css from './Form.module.css';
+import { contactsArrSelector } from 'store/Selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { eachWordWithCapitalLetter } from 'utils';
+import { addContact } from 'store/ContactsSlice';
+import { nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
   name: '',
   number: '',
 };
 
-const Form = ({ createConatct }) => {
+const Form = () => {
   const [state, setState] = useState(initialState);
+  const contactsArr = useSelector(contactsArrSelector);
+  const dispatch = useDispatch();
 
   const handleInput = evt => {
     const { name, value } = evt.target;
@@ -31,6 +38,25 @@ const Form = ({ createConatct }) => {
     };
     createConatct({ ...optimizeData });
     setState(initialState);
+  };
+
+  const createConatct = item => {
+    if (
+      contactsArr.some(
+        contact => contact.name.toLowerCase() === item.name.toLowerCase()
+      )
+    ) {
+      alert(`${item.name} is already exist!`);
+      return;
+    }
+
+    const optimiseItemData = {
+      name: eachWordWithCapitalLetter(item.name),
+      number: item.number,
+      id: nanoid(),
+    };
+
+    dispatch(addContact(optimiseItemData));
   };
 
   return (
